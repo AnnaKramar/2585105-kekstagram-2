@@ -2,55 +2,55 @@ import { renderComments, clearComments } from './render-comments.js';
 import { isEsc, toggleModalElement } from './utils.js';
 
 
-const bigPicture = document.querySelector('.big-picture');
-const bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
-const bigPictureImg = bigPicture.querySelector('img');
-const likesCount = bigPicture.querySelector('.likes-count');
-const commentsCount = bigPicture.querySelector('.social__comment-total-count');
-const socialCaption = bigPicture.querySelector('.social__caption');
+const bigPictureModal = document.querySelector('.big-picture');
+const closeButtonElement = bigPictureModal.querySelector('.big-picture__cancel');
+const bigPictureImageElement = bigPictureModal.querySelector('img');
+const likesCountElement = bigPictureModal.querySelector('.likes-count');
+const commentsCountElement = bigPictureModal.querySelector('.social__comment-total-count');
+const imageDescriptionElement = bigPictureModal.querySelector('.social__caption');
 
 
-const editBigPicture = (photo) => {
-  likesCount.textContent = photo.likes;
-  commentsCount.textContent = photo.comments.length;
-  socialCaption.textContent = photo.description;
-  bigPictureImg.src = photo.url;
-  bigPictureImg.alt = photo.description;
+const updateBigPictureDetails = (photo) => {
+  likesCountElement.textContent = photo.likes;
+  commentsCountElement.textContent = photo.comments.length;
+  imageDescriptionElement.textContent = photo.description;
+  bigPictureImageElement.src = photo.url;
+  bigPictureImageElement.alt = photo.description;
 };
 
 
-const openBigPicture = (photo) => {
-  document.addEventListener('keydown', onDocumentKeydown);
+const showBigPicture = (photo) => {
+  document.addEventListener('keydown', handleKeydownEvent);
 
-  toggleModalElement(bigPicture);
+  toggleModalElement(bigPictureModal);
   clearComments();
-  editBigPicture(photo);
+  updateBigPictureDetails(photo);
   renderComments(photo.comments);
 };
 
 
-const closeBigPicture = () => {
-  document.removeEventListener('keydown', onDocumentKeydown);
+const hideBigPicture = () => {
+  document.removeEventListener('keydown', handleKeydownEvent);
 
-  toggleModalElement(bigPicture);
+  toggleModalElement(bigPictureModal);
 };
 
 
-function onDocumentKeydown(evt) {
+function handleKeydownEvent(evt) {
   if (isEsc(evt.keyCode)) {
     evt.preventDefault();
 
-    closeBigPicture();
+    hideBigPicture();
   }
 }
 
 
-const onCloseButtonClick = () => {
-  closeBigPicture();
+const handleCloseButtonClick = () => {
+  hideBigPicture();
 };
 
 
-bigPictureCloseButton.addEventListener('click', onCloseButtonClick);
+closeButtonElement.addEventListener('click', handleCloseButtonClick);
 
 
-export { openBigPicture };
+export { showBigPicture };
